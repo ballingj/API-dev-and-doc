@@ -1,0 +1,55 @@
+############################################################
+# 
+# Copying a Postgres database from one server to Another
+# 
+############################################################
+
+
+Step 1: Create a Dump file of the source database.
+
+  pg_dump -U postgres -d <source_database> -f <source_filename.sql>
+
+Ex:
+   pg_dump -U postgres -d trivia -f mytriviadump.sql
+
+
+Step 2: Copy the dump file to the remote server. 
+
+
+Step 3: Create a new database in the remote server where you want to restore the database dump:
+
+    CREATE DATABASE target_database;
+
+Ex:
+   CREATE DATABASE trivia
+
+Step 4: Restore the dump file on the remote server: 
+
+   psql -U postgres -h <host_ip> -p <port> -d <target_database> -f <source_filename.sql>
+
+Ex:
+   psql -U postgres -h 192.168.1.20 -p 5432 -d trivia -f mytriviadump.sql
+
+
+
+####################################
+# Connecting to remote postgresql
+####################################
+
+psql -U <user> -h <host_ip> -p <port>
+
+Ex:
+ psql -U postgres -h 192.168.1.20 -p 5432
+
+
+#########################
+# Start over with new db
+#########################
+'''
+# in psql session
+drop database trivia_test;
+create database trivia_test;
+
+# from bash
+psql -U postgres -h 192.168.1.20 -p 5432 -d trivia_test -f mytriviadump.sql
+'''

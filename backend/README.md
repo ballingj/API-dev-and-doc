@@ -36,6 +36,13 @@ Populate the database using the `trivia.psql` file provided. From the `backend` 
 psql trivia < trivia.psql
 ```
 
+### If you are using WSL, slight modifications is necessary
+
+```bash
+sudo -iu postgres createdb trivia
+sudo -iu postgres psql trivia < trivia.psql
+```
+
 ### Run the Server
 
 From within the `./src` directory first ensure you are working using your created virtual environment.
@@ -101,4 +108,12 @@ dropdb trivia_test
 createdb trivia_test
 psql trivia_test < trivia.psql
 python test_flaskr.py
+```
+
+### If you are using WSL, slight modifications is necessary
+
+```bash
+sudo -iu postgres dropdb trivia_test
+sudo -iu postgres createdb trivia_test
+sudo -iu postgres psql trivia_test < trivia.psql
 ```
