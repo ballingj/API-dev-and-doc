@@ -252,15 +252,11 @@ def create_app(db_URI="", test_config=None):
     def play_quiz():
         body = request.get_json()
         previous_questions = body.get("previous_questions", [])
-        quiz_category = body.get('quiz_category', None)
-        
+        quiz_category = body.get('quiz_category', None)       
         
         if body is None or quiz_category is None:
             abort(400)
-
-        # if All categories are selected that get all the questions
-        # else, when a specific category is selected, select only the
-        # questions of that category that are not in previous questions
+        '''if no category, all; else, filter by category.'''
         if quiz_category['id'] == 0:
             questions = Question.query.filter(Question.id.not_in(previous_questions)).all()
         else:
