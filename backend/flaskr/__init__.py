@@ -171,7 +171,7 @@ def create_app(db_URI="", test_config=None):
                 'success': True,
                 'created': question.id,
                 'questions': current_questions,
-                'total_questions': len(Question.query.all())
+                'total_questions': len(selection)
             })
         except:
             abort(422)
@@ -198,11 +198,6 @@ def create_app(db_URI="", test_config=None):
 
         if len(current_questions) == 0:
             abort(404)
-        
-        # categories = Category.query.order_by(Category.id).all()
-        # category_dict = {}
-        # for category in categories:
-        #     category_dict[category.id] = category.type
 
         return jsonify({
             'success': True,
@@ -256,6 +251,7 @@ def create_app(db_URI="", test_config=None):
         
         if body is None or quiz_category is None:
             abort(400)
+
         '''if no category, all; else, filter by category.'''
         if quiz_category['id'] == 0:
             questions = Question.query.filter(Question.id.not_in(previous_questions)).all()

@@ -31,13 +31,14 @@ class TriviaTestCase(unittest.TestCase):
             "difficulty": 4,
             "category": 4
         }
+
     
     def tearDown(self):
         """Executed after reach test"""
         pass
 
     """
-    TODO
+    DONE:
     Write at least one test for each test for successful operation and for expected errors.
     """
 
@@ -104,6 +105,15 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data["success"], False)
         self.assertEqual(data["message"], "Method Not Allowed")
 
+    '''Test quizzes endpoint'''
+    def test_quizzes(self):
+        res = self.client().post("/quizzes", json={"quiz_category": {"id": "2", "type": "Art"}})
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertEqual(data["question"]["category"], 2)
+        self.assertTrue(data["question"], True)
 
 
 
