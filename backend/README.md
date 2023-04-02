@@ -55,6 +55,7 @@ flask run --reload
 
 The `--reload` flag will detect file changes and restart the server automatically.
 
+---
 ## API endpoints and behaviors
 
 ---
