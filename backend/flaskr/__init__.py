@@ -74,7 +74,6 @@ def create_app(db_URI="", test_config=None):
         })
 
 
-
     """
     @Done:
     Create an endpoint to handle GET requests for questions,
@@ -110,7 +109,6 @@ def create_app(db_URI="", test_config=None):
             'current_category': None
         })
     
-
 
     """
     @DONE:
@@ -177,7 +175,6 @@ def create_app(db_URI="", test_config=None):
             abort(422)
 
 
-
     """
     @DONE:
     Create a POST endpoint to get questions based on a search term.
@@ -206,6 +203,7 @@ def create_app(db_URI="", test_config=None):
             #'categories': category_dict,
             'current_category': None
         })
+    
     
     """
     @DONE:

@@ -4,7 +4,7 @@
 
 ### Install Dependencies
 
-1. **Python 3.7** - Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
+1. **Python 3.9** - Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
 
 2. **Virtual Environment** - We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organized. Instructions for setting up a virual environment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 
@@ -55,65 +55,174 @@ flask run --reload
 
 The `--reload` flag will detect file changes and restart the server automatically.
 
-## To Do Tasks
+## API endpoints and behaviors
 
-These are the files you'd want to edit in the backend:
+---
+> `GET '/categories'`
 
-1. `backend/flaskr/__init__.py`
-2. `backend/test_flaskr.py`
-
-One note before you delve into your tasks: for each endpoint, you are expected to define the endpoint and response data. The frontend will be a plentiful resource because it is set up to expect certain endpoints and response data formats already. You should feel free to specify endpoints in your own way; if you do so, make sure to update the frontend or you will get some unexpected behavior.
-
-1. Use Flask-CORS to enable cross-domain requests and set response headers.
-2. Create an endpoint to handle `GET` requests for questions, including pagination (every 10 questions). This endpoint should return a list of questions, number of total questions, current category, categories.
-3. Create an endpoint to handle `GET` requests for all available categories.
-4. Create an endpoint to `DELETE` a question using a question `ID`.
-5. Create an endpoint to `POST` a new question, which will require the question and answer text, category, and difficulty score.
-6. Create a `POST` endpoint to get questions based on category.
-7. Create a `POST` endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question.
-8. Create a `POST` endpoint to get questions to play the quiz. This endpoint should take a category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions.
-9. Create error handlers for all expected errors including 400, 404, 422, and 500.
-
-## Documenting your Endpoints
-
-You will need to provide detailed documentation of your API endpoints including the URL, request parameters, and the response body. Use the example below as a reference.
-
-### Documentation Example
-
-`GET '/api/v1.0/categories'`
-
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
+  - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+  - Request Arguments: None
+  - Returns: An object with a single key, categories, that contains an object of id: category_string key:value pairs.
 
 ```json
 {
-  "1": "Science",
-  "2": "Art",
-  "3": "Geography",
-  "4": "History",
-  "5": "Entertainment",
-  "6": "Sports"
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  }
+}
+```
+---
+> `GET '/questions?page=${integer}'`
+
+- Fetches a paginated set of questions, a total number of questions, all categories and current category string.
+- Request Arguments: page - integer
+- Returns: An object with 10 paginated questions, total questions, object including all categories, and current category string
+
+```json
+{
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "current_category": "Entertainment",
+  "questions": [
+    {
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4,
+      "id": 2,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }
+  ],
+  "success": true,
+  "total_questions": 20
+}
+```
+---
+> `GET '/categories/${id}/questions'`
+
+- Fetches questions for a cateogry specified by id request argument
+- Request Arguments: id - integer
+- Returns: An object with questions for the specified category, total questions, and current category string
+
+```json
+{
+  "current_category": 1,
+  "questions": [
+    {
+      "answer": "The Liver",
+      "category": 1,
+      "difficulty": 4,
+      "id": 20,
+      "question": "What is the heaviest organ in the human body?"
+    }
+  ],
+  "total_questions": 1
+}
+```
+---
+> `DELETE '/questions/${id}'`
+
+- Deletes a specified question using the id of the question
+- Request Arguments: id - integer
+- Returns: Does not need to return anything besides the appropriate HTTP status code. Optionally can return the id of the question. If you are able to modify the frontend, you can have it remove the question using the id instead of refetching the questions.
+
+```json
+{
+  "deleted": 23,
+  "success": true,
+  "questions": [
+    {
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4,
+      "id": 2,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    }
+  ], 
+  "total_questions": 23
+}
+```
+---
+> `POST '/quizzes'`
+
+- Sends a post request in order to get the next question
+- Request Body:
+
+```json
+{
+  "previous_questions": [1, 4, 20, 15],
+  "quiz_category": {"id": "2", "type": "Art"}
+ }
+```
+- Returns: a single new question object
+
+```json
+{
+    "question": {
+        "answer": "Jackson Pollock",
+        "category": 2,
+        "difficulty": 2,
+        "id": 19,
+        "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
+    },
+    "status_code": 200,
+    "success": true
+}
+```
+---
+> `POST '/questions'`
+
+- Sends a post request in order to add a new question
+- Request Body:
+
+```json
+{
+  "question":  "Heres a new question string",
+  "answer":  "Heres a new answer string",
+  "difficulty": 1,
+  "category": 3,
 }
 ```
 
-## Testing
+- Returns: Does not return any new data
+---
+> `POST '/search'`
 
-Write at least one test for the success and at least one error behavior of each endpoint using the unittest library.
+- Sends a post request in order to search for a specific question by search term
+- Example searchTerm = "author"
 
-To deploy the tests, run
-
-```bash
-dropdb trivia_test
-createdb trivia_test
-psql trivia_test < trivia.psql
-python test_flaskr.py
+Request Body:
+```json
+{
+  "searchTerm": "author"
+}
 ```
 
-### If you are using WSL, slight modifications is necessary
+- Returns: any array of questions, a number of total Questions that met the search term and the current category string
 
-```bash
-sudo -iu postgres dropdb trivia_test
-sudo -iu postgres createdb trivia_test
-sudo -iu postgres psql trivia_test < trivia.psql
+```json
+{
+    "current_category": null,
+    "questions": [
+        {
+            "answer": "Tom Cruise",
+            "category": 5,
+            "difficulty": 4,
+            "id": 4,
+            "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+        }
+    ],
+    "success": true,
+    "total_questions": 1
+}
 ```
